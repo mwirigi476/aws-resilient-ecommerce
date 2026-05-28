@@ -1,0 +1,18 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Logging into ECR...
+      - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ://amazonaws.com
+  build:
+    commands:
+      - echo Building Docker Image...
+      - docker build -t capstone-web-app:latest .
+      - docker tag capstone-web-app:latest ://amazonaws.com/capstone-web-app:latest
+  post_build:
+    commands:
+      - echo Pushing image to production storage...
+      - docker push ://amazonaws.com/capstone-web-app:latest
+      - printf '[{"name":"web","imageUri":"%s"}]' ://amazonaws.com/capstone-web-app:latest > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json
