@@ -1,1 +1,0 @@
-# aws-resilient-ecommerce
